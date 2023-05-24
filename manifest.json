@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "Mi Plugin de Texto a Voz y Voz a Texto",
+  "version": "1.0",
+  "description": "Un plugin que agrega funcionalidades de texto a voz y voz a texto a páginas web.",
+  "permissions": [
+    "downloads",
+    "audio",
+    "storage",
+    "scripting",
+    "tabs",
+    "http://chat.openai.com/*",
+    "https://chat.openai.com/*"
+  ],
+  "action": {
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    },
+    "default_title": "Mi Plugin"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_page": "options.html",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.openai.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ]
+}
