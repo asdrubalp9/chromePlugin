@@ -9,6 +9,7 @@
     "storage",
     "scripting",
     "tabs",
+    "clipboard",
     "http://chat.openai.com/*",
     "https://chat.openai.com/*"
   ],
