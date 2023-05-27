@@ -1,10 +1,208 @@
+import FormGenerator from './formGenerator.js';
+const formFields = [
+    {
+        name: 'sound',
+        label: 'Sound configuration',
+        name: 'sound',
+        placeholder: 'Sound configuration',
+        htmlId: 'sound',
+        htmlclass: '',
+        value: '',
+        defaultValue: 'always',
+        type: 'radio',
+        Hint: '',
+        options: [
+            {
+                label: 'Always sound when chatGPT finishes',
+                value: 'always',
+            },
+            {
+                label: 'Only sound when chatGPT is not focused',
+                value: 'notFocused',
+            },
+            {
+                label: 'Never make a sound',
+                value: 'never',
+            },
+        ]
+    },
+    {
+        name: 'oneLiner',
+        label: 'Eliminate breakspaces, double spaces and new lines',
+        name: 'oneLiner',
+        htmlId: 'oneLiner',
+        htmlclass: '',
+        value: '',
+        defaultValue: 'always',
+        type: 'radio',
+        Hint: '',
+        options: [
+            {
+                label: 'Always',
+                value: 'always',
+            },
+            {
+                label: 'Never',
+                value: 'never',
+            },
+        ]
+    },
+    {
+        name: 'svg',
+        label: 'SVG Redaction',
+        name: 'svg',
+        placeholder: 'SVG Redaction',
+        htmlId: 'svg',
+        htmlclass: '',
+        value: '',
+        defaultValue: 'always',
+        type: 'radio',
+        Hint: '',
+        options: [
+            {
+                label: `Always redact`,
+                value: `always`,
+            },
+            {
+                label: `Never Redact`,
+                value: `never`,
+            },
+        ]
+    },
+]
+
+const typeOfElements = [
+    
+    {
+        name: 'aTag',
+        label: 'a tag',
+        type: 'text',
+    },
+    {
+        name: 'pTag',
+        label: 'p tag',
+        type: 'text',
+    },
+    {
+        name: 'h1Tag',
+        label: 'h1 tag',
+        type: 'text',
+    },
+    {
+        name: 'h2Tag',
+        label: 'h2 tag',
+        type: 'text',
+    },
+    {
+        name: 'h3Tag',
+        label: 'h3 tag',
+        type: 'text',
+    },
+    {
+        name: 'h4Tag',
+        label: 'h4 tag',
+        type: 'text',
+    },
+    {
+        name: 'h5Tag',
+        label: 'h5 tag',
+        type: 'text',
+    },
+    {
+        name: 'h6Tag',
+        label: 'h6 tag',
+        type: 'text',
+    },
+    {
+        name: 'ulTag',
+        label: 'ul tag',
+        type: 'text',
+    },
+    {
+        name: 'liTag',
+        label: 'li tag',
+        type: 'text',
+    },
+    {
+        name: 'function',
+        label: 'Function',
+        type: 'text',
+    },
+    {
+        name: 'class',
+        label: 'Class',
+        type: 'text',
+    },
+    {
+        name: 'Object',
+        label: 'Object',
+        type: 'text',
+    },
+    {
+        name: 'Interface',
+        label: 'Interface',
+        type: 'text',
+    },
+    {
+        name: 'Array',
+        label: 'Array',
+        type: 'text',
+    },
+    {
+        name: 'Variable',
+        label: 'Variable',
+        type: 'text',
+    },
+    {
+        name: 'Dictionary',
+        label: 'Dictionary',
+        type: 'text',
+    },
+    
+]
+let k = 0;
+for (let element of typeOfElements) {
+    let temp = {
+        name: `${element.name.toLowerCase().replace(' ','')}Redaction`,
+        label: `${element.label}`,
+        htmlId: `${element.name.toLowerCase().replace(' ','')}Redaction${++k}`,
+        htmlclass: ``,
+        value: ``,
+        type: element.type
+    }
+    if(element.type === 'radio'){
+        temp.defaultValue = `always`
+    }
+    if(element.type.includes('text')){
+        temp.defaultValue = `*`
+        temp.value = `*`
+        temp.placeholder = `Redact content of all ${element.name.toLowerCase()} except for the separated by comas, example: "div1,div2,div3"`
+        temp.label = `${element.name.toLowerCase()} redaction | * for all or do not clear the separated by comas, leave empty for no redaction of this element`
+        temp.hint = `* for all or do not clear the separated by comas, leave empty for no redaction of this element`
+    }
+    if(element?.options){
+        temp.options = element.options
+    }
+    formFields.push(temp)
+}
+
+let formGenerator = new FormGenerator('.optionScreen', formFields);
+formGenerator.generateForm().then(() => {
+    console.log('Form has been generated.');
+}).catch(error => {
+    console.error('Failed to generate form:', error);
+});
+
+
+
+const loadingScreen = document.querySelector('.loadingScreen');
+const optionScreen = document.querySelector('.optionScreen');
+loadingScreen.classList.add('d-none');
+optionScreen.classList.remove('d-none');
+/*
 document.addEventListener('DOMContentLoaded', function () {
     const notifier = document.querySelector('.notifier');
-    const loadingScreen = document.querySelector('.loadingScreen');
-    const optionScreen = document.querySelector('.optionScreen');
     console.log('DOMContentLoaded', loadingScreen,optionScreen)
-    loadingScreen.classList.add('d-none');
-    optionScreen.classList.remove('d-none');
     const saveButton = document.getElementById('save');
     const soundRadio1 = document.getElementById('soundRadio1');
     const soundRadio2 = document.getElementById('soundRadio2');
@@ -149,3 +347,4 @@ function setRedactSvgCheckbox(svgSetting) {
   redactSvg1.checked = (svgSetting === 'redactSvg1');
   redactSvg2.checked = (svgSetting === 'redactSvg2');
 }
+*/
