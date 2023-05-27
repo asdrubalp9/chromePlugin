@@ -37,6 +37,9 @@ class FormGenerator {
             
             let fieldElement;
             switch (field.type) {
+                case 'separator':
+                    fieldElement = this.createSeparator(field);
+                break;
                 case 'text':
                 case 'password':
                 case 'email':
@@ -67,6 +70,38 @@ class FormGenerator {
         element.appendChild(formElement);
     }
 
+    createSeparator(field) {
+        let divElement = document.createElement('div');
+        divElement.className = 'mb-3 row';
+
+        let divCol1Element = document.createElement('div');
+        divCol1Element.className = 'col';
+
+        let hr1Element = document.createElement('hr');
+        hr1Element.className = 'mt-4';
+        divCol1Element.appendChild(hr1Element);
+
+        let divCol2Element = document.createElement('div');
+        divCol2Element.className = 'col';
+
+        let pElement = document.createElement('p');
+        pElement.className = 'fw-bold text-center col-12';
+        pElement.innerText = field.label;
+        divCol2Element.appendChild(pElement);
+
+        let divCol3Element = document.createElement('div');
+        divCol3Element.className = 'col';
+
+        let hr2Element = document.createElement('hr');
+        hr2Element.className = 'mt-4';
+        divCol3Element.appendChild(hr2Element);
+
+        divElement.appendChild(divCol1Element);
+        divElement.appendChild(divCol2Element);
+        divElement.appendChild(divCol3Element);
+
+        return divElement;
+    }
 
     async createTextField(field) {
         let divElement = document.createElement('div');
@@ -75,7 +110,7 @@ class FormGenerator {
         let labelElement = document.createElement('label');
         labelElement.for = field.htmlId;
         labelElement.className = 'form-label';
-        labelElement.innerText = field.label;
+        labelElement.innerHTML = field.label;
         
         let inputElement = document.createElement('input');
         inputElement.type = field.type;
@@ -112,7 +147,7 @@ class FormGenerator {
         
         let labelElement = document.createElement('label');
         labelElement.for = field.htmlId;
-        labelElement.className = 'form-label';
+        labelElement.className = 'form-label fw-semibold';
         labelElement.innerText = field.label;
         
         let textAreaElement = document.createElement('textarea');
@@ -149,7 +184,7 @@ class FormGenerator {
         div.className = 'mb-3';
 
         let label = document.createElement('label');
-        label.className = 'form-label';
+        label.className = 'form-label fw-semibold';
         label.innerText = field.label;
 
         div.appendChild(label);

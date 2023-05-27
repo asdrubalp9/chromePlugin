@@ -27,6 +27,10 @@ const formFields = [
         ]
     },
     {
+        type: 'separator',
+        label: 'Pasting Configuration'
+    },
+    {
         name: 'oneLiner',
         label: 'Eliminate breakspaces, double spaces and new lines',
         name: 'oneLiner',
@@ -46,6 +50,10 @@ const formFields = [
                 value: 'never',
             },
         ]
+    },
+    {
+        type: 'separator',
+        label: 'Redactable elements'
     },
     {
         name: 'svg',
@@ -72,7 +80,6 @@ const formFields = [
 ]
 
 const typeOfElements = [
-    
     {
         name: 'aTag',
         label: 'a tag',
@@ -177,7 +184,7 @@ for (let element of typeOfElements) {
         temp.defaultValue = `*`
         temp.value = `*`
         temp.placeholder = `Redact content of all ${element.name.toLowerCase()} except for the separated by comas, example: "div1,div2,div3"`
-        temp.label = `${element.name.toLowerCase()} redaction | * for all or do not clear the separated by comas, leave empty for no redaction of this element`
+        temp.label = `${element.label.toLowerCase()} redaction <span class="text-muted">| * for all or do not clear the separated by comas, leave empty for no redaction of this element</span>`
         temp.hint = `* for all or do not clear the separated by comas, leave empty for no redaction of this element`
     }
     if(element?.options){
