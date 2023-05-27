@@ -92,6 +92,13 @@ function downloadHTMLContent() {
     alert('Debes seleccionar una conversacion primero')
   }
 }
+document.addEventListener('keydown', function(event) {
+    if (event.ctrlKey && event.shiftKey && event.code === 'KeyZ') {
+        console.log('Ctrl + Shift + B was pressed');
+        // Aquí puedes llamar a tu función
+        clearPastableContent();
+    }
+});
 
 function clearPastableContent() {
   //check if have permission to get access to clipboard

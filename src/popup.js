@@ -91,3 +91,13 @@ function setRadioButtons(soundSetting) {
     soundRadio2.checked = (soundSetting === 'notFocused');
     soundRadio3.checked = (soundSetting === 'never');
 }
+
+document.getElementById('optionsLink').addEventListener('click', function() {
+    if (chrome.runtime.openOptionsPage) {
+        // New way to open options pages, if supported (Chrome 42+).
+        chrome.runtime.openOptionsPage();
+    } else {
+        // Reasonable fallback.
+        window.open(chrome.runtime.getURL('options.html'));
+    }
+});
