@@ -15,7 +15,7 @@ Si desea probar la extensión antes de que se publique oficialmente, siga estos 
 - Copy code
 - git clone https://github.com/asdrubalp9/chromePlugin.git
 - RUN: npm install
-- RUN: npm run watch
+- RUN: npm run build
 - Habilitar el modo de desarrollador en Chrome: Abra Chrome y vaya a la página de extensiones (chrome://extensions/). En la esquina superior derecha, encontrará un interruptor para el 'Modo de desarrollador'. Asegúrese de que este interruptor esté en la posición de 'Activado'.
 
 - Cargar la extensión desempaquetada: En la misma página de extensiones, verá un botón que dice 'Cargar desempaquetada'. Haga clic en este botón y seleccione la carpeta del repositorio que acaba de clonar.
