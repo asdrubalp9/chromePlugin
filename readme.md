@@ -13,7 +13,7 @@ Si desea probar la extensión antes de que se publique oficialmente, siga estos 
 - Clonar el repositorio: Primero, deberá clonar este repositorio en su computadora local. Puede hacerlo ejecutando el siguiente comando en su terminal:
 - bash
 - Copy code
-- git clone https://github.com/yourusername/yourrepository.git
+- git clone https://github.com/asdrubalp9/chromePlugin.git
 - tienen que poner npm install
 - npm run build
 - Habilitar el modo de desarrollador en Chrome: Abra Chrome y vaya a la página de extensiones (chrome://extensions/). En la esquina superior derecha, encontrará un interruptor para el 'Modo de desarrollador'. Asegúrese de que este interruptor esté en la posición de 'Activado'.
