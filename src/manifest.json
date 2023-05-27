@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "ChatEnhancer",
+  "version": "1.0",
+  "description": "this adds some features to the chat",
+  "permissions": [
+    "downloads",
+    "audio",
+    "storage",
+    "scripting",
+    "tabs",
+    "clipboard",
+    "http://chat.openai.com/*",
+    "https://chat.openai.com/*",
+    "https://*.openai.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    },
+    "default_title": "Mi Plugin"
+  },
+  "web_accessible_resources": [{
+    "resources": ["ding.mp3"],
+    "matches": ["<all_urls>"]
+  }],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "options_page": "options.html",
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.openai.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ]
+}
