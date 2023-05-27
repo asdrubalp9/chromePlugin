@@ -23,7 +23,7 @@ function HTMLInjector(HTML, selector, position) {
 }
 
 const copyPasteBtn = `
-    <button id="copyPasteBtn" style="position: fixed;top: 6em;right: 1em;border-radius: 50%;height: 50px;width: 50px;display: flex;align-items: center;justify-content: center;" class="btn btn-neutral shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
+    <button id="copyPasteBtn" title="ctrl+shift+z to paste directly to text area" style="position: fixed;top: 6em;right: 1em;border-radius: 50%;height: 50px;width: 50px;display: flex;align-items: center;justify-content: center;" class="btn btn-neutral shadow-[0_0_10px_rgba(0,0,0,0.10)] dark:shadow-[0_0_15px_rgba(0,0,0,0.10)]">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M392.8 1.2c-17-4.9-34.7 5-39.6 22l-128 448c-4.9 17 5 34.7 22 39.6s34.7-5 39.6-22l128-448c4.9-17-5-34.7-22-39.6zm80.6 120.1c-12.5 12.5-12.5 32.8 0 45.3L562.7 256l-89.4 89.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l112-112c12.5-12.5 12.5-32.8 0-45.3l-112-112c-12.5-12.5-32.8-12.5-45.3 0zm-306.7 0c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3l112 112c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256l89.4-89.4c12.5-12.5 12.5-32.8 0-45.3z"/></svg>
     </button>
 `;
@@ -94,8 +94,6 @@ function downloadHTMLContent() {
 }
 document.addEventListener('keydown', function(event) {
     if (event.ctrlKey && event.shiftKey && event.code === 'KeyZ') {
-        console.log('Ctrl + Shift + B was pressed');
-        // Aquí puedes llamar a tu función
         clearPastableContent();
     }
 });
@@ -109,10 +107,16 @@ function clearPastableContent() {
         let textarea = document.querySelector('textarea')
         if(pastableContent && textarea){
           let text = pastableContent.replace(/[\r\n]+/g, ' ');
-          console.log('pastableContent', pastableContent, text)
-          textarea.value += text
-          textarea.style.height=264+'px'
-          textarea.focus()
+          getRedactSvgSetting((redactSvgSetting) => {
+            console.log('getRedactSvgSetting', redactSvgSetting)
+              if (redactSvgSetting === 'redactSvg1') {
+                text = redactSVGContent(text);
+              }
+
+              textarea.value += text;
+              textarea.style.height = 264 + 'px';
+              textarea.focus();
+            });
         }else{
           console.log('could not find textArea')
         }
@@ -122,9 +126,19 @@ function clearPastableContent() {
       });
     }
   });
-  
+}
+function redactSVGContent(inputString) {
+  const regex = /<svg[\s\S]*?<\/svg>/g;
+  const redactedContent = '<svg><!-- redacted --></svg>';
+  const redactedString = inputString.replace(regex, redactedContent);
+  return redactedString;
 }
 
+function getRedactSvgSetting(callback) {
+  chrome.storage.sync.get('redactSvg', function(data) {
+    callback(data.redactSvg || 'redactSvg1'); // Default to 'redactSvg1' if no setting is found
+  });
+}
 
 let myMonitor = new ElementMonitor();
 myMonitor.init();

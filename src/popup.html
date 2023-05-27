@@ -43,7 +43,7 @@
         <div class="mb-3">
             <label for="exampleInputEmail1" class="form-label text-bold">Sound</label>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="sound" value="always" id="soundRadio1" checked>
+                <input class="form-check-input" type="radio" name="sound" value="always" id="soundRadio1" >
                 <label class="form-check-label" for="soundRadio1">
                     Always sound when chat finished responding
                 </label>
@@ -58,6 +58,21 @@
                 <input class="form-check-input" type="radio" name="sound" value="never" id="soundRadio3" >
                 <label class="form-check-label" for="soundRadio3">
                     Never make a sound
+                </label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label text-bold">SVG Redaction | <span class="text-muted">content inside svg is redacted</span></label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="redactSvg" value="always" id="redactSvg1" >
+                <label class="form-check-label" for="redactSvg1">
+                    Always redact svg content
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="redactSvg" value="notFocused" id="redactSvg2" >
+                <label class="form-check-label" for="redactSvg2">
+                    Never redact svg content
                 </label>
             </div>
         </div>

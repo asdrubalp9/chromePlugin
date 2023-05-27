@@ -9,8 +9,25 @@ document.addEventListener('DOMContentLoaded', function () {
     const soundRadio1 = document.getElementById('soundRadio1');
     const soundRadio2 = document.getElementById('soundRadio2');
     const soundRadio3 = document.getElementById('soundRadio3');
+    const redactSvg1 = document.getElementById('redactSvg1');
+    const redactSvg2 = document.getElementById('redactSvg2');
+    
 
     // Load the current setting and set the radio buttons
+    chrome.storage.sync.get('redactSvg', function(data) {
+        console.log('data', data.redactSvg)
+        switch (data.redactSvg) {
+            case 'always':
+                redactSvg1.checked = true;
+                break;
+            case 'notFocused':
+                redactSvg2.checked = true;
+                break;
+            default:
+                redactSvg1.checked = true;
+                break;
+        }
+    });
     chrome.storage.sync.get('sound', function(data) {
         console.log('data', data.sound)
         switch (data.sound) {
@@ -101,3 +118,34 @@ document.getElementById('optionsLink').addEventListener('click', function() {
         window.open(chrome.runtime.getURL('options.html'));
     }
 });
+
+getSvgSetting((svgSetting) => {
+  setRedactSvgCheckbox(svgSetting);
+});
+
+// Save the settings when redactSvg checkboxes change
+[redactSvg1, redactSvg2].forEach((checkbox) => {
+  checkbox.addEventListener('change', function() {
+    saveSvgSetting(checkbox.id, checkbox.checked);
+  });
+});
+
+function getSvgSetting(callback) {
+  chrome.storage.sync.get('redactSvg', function(data) {
+    callback(data.redactSvg || 'redactSvg1'); // Default to 'redactSvg1' if no setting is found
+  });
+}
+
+function saveSvgSetting(svgSettingId, svgSettingValue) {
+  chrome.storage.sync.set({ 'redactSvg': svgSettingId }, function() {
+    document.querySelector('.notifier').innerText = 'SVG setting saved!';
+    console.log('SVG setting saved');
+  });
+}
+
+function setRedactSvgCheckbox(svgSetting) {
+  const redactSvg1 = document.getElementById('redactSvg1');
+  const redactSvg2 = document.getElementById('redactSvg2');
+  redactSvg1.checked = (svgSetting === 'redactSvg1');
+  redactSvg2.checked = (svgSetting === 'redactSvg2');
+}
