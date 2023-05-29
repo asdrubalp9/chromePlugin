@@ -1,25 +1,25 @@
 import ElementMonitor from './elementMonitor.js';
+import TextRedacter from './TextRedacter.js';
 
-//TODO:
+// TODO:
 // agregar funcion para saber si termino de escribir chad
 // que al descargar el html, se copien todos los estilos y se agreguen
 // instalar SWAL
-
 
 function HTMLInjector(HTML, selector, position) {
   // 'beforebegin': Antes del elemento en sí.
   // 'afterbegin': Justo dentro del elemento, antes de su primer hijo.
   // 'beforeend': Justo dentro del elemento, después de su último hijo.
   // 'afterend': Después del elemento en sí.
-    var intervalId = setInterval(function() {
-        var elements = document.querySelectorAll(selector);
-        if (elements.length > 0) {
-            elements.forEach(function(element) {
-                element.insertAdjacentHTML(position, HTML);
-            });
-            clearInterval(intervalId);
-        }
-    }, 1000); // 1000ms = 1s
+  var intervalId = setInterval(() => {
+    const elements = document.querySelectorAll(selector);
+    if (elements.length > 0) {
+      elements.forEach((element) => {
+        element.insertAdjacentHTML(position, HTML);
+      });
+      clearInterval(intervalId);
+    }
+  }, 1000); // 1000ms = 1s
 }
 
 const copyPasteBtn = `
@@ -37,108 +37,59 @@ document.body.insertAdjacentHTML('beforeend', downloadBtnHTML);
 document.body.insertAdjacentHTML('beforeend', copyPasteBtn);
 // Conecta el botón con la función de descarga
 document.getElementById('downloadBtn').addEventListener('click', () => {
-    // Encuentra el elemento usando el selector CSS 
-    downloadHTMLContent()
+  // Encuentra el elemento usando el selector CSS
+  downloadHTMLContent();
 });
-document.getElementById('copyPasteBtn').addEventListener('click', () => {
-    // Encuentra el elemento usando el selector CSS 
-    clearPastableContent()
-});
+
 function downloadHTMLContent() {
-    selector = '#__next main'
-    const element = document.querySelector(selector);
-    const titleSelector = 'nav .bg-gray-800'
-    const title = document.querySelector(titleSelector)
-  if(title){
+  selector = '#__next main';
+  const element = document.querySelector(selector);
+  const titleSelector = 'nav .bg-gray-800';
+  const title = document.querySelector(titleSelector);
+  if (title) {
     if (element) {
-        const htmlContent = element.outerHTML;
+      const htmlContent = element.outerHTML;
 
-        const regex = /(<textarea.*?<\/textarea>)|(<button.*?<\/button>)|(<input.*?>)|(<svg.*?<\/svg>)/g;
-        const htmlContentCleaned = htmlContent.replace(regex, '');
+      const regex = /(<textarea.*?<\/textarea>)|(<button.*?<\/button>)|(<input.*?>)|(<svg.*?<\/svg>)/g;
+      const htmlContentCleaned = htmlContent.replace(regex, '');
 
-        // Recoge todos los elementos de estilo y hojas de estilo enlazadas
-        const styleElements = document.querySelectorAll('style, link[rel="stylesheet"],link[as="style"],link[rel="preload"],link[href*="css"]');
+      // Recoge todos los elementos de estilo y hojas de estilo enlazadas
+      const styleElements = document.querySelectorAll('style, link[rel="stylesheet"],link[as="style"],link[rel="preload"],link[href*="css"]');
 
-        // Recorre cada elemento de estilo y hoja de estilo enlazada
-        let stylesString = '';
-        styleElements.forEach(function(styleElement) {
-          // Si es un elemento de estilo, agrega su contenido a stylesString
-          if (styleElement.tagName.toLowerCase() === 'style') {
-            stylesString += styleElement.innerText;
-          }
-          // Si es una hoja de estilo enlazada, agrega todo su contenido a stylesString
-          else if (styleElement.tagName.toLowerCase() === 'link') {
-            // Realiza una solicitud HTTP para obtener el contenido de la hoja de estilo
-            // Nota: esto puede fallar debido a restricciones de CORS dependiendo de la hoja de estilo
-            fetch(styleElement.href)
-              .then(response => response.text())
-              .then(css => {
-                stylesString += css;
-              });
-          }
-        });
-        console.log('stylesString',stylesString)
-        const styleTag = `<style>${stylesString}</style>`;
-        const htmlContentWithStyles = htmlContentCleaned + styleTag;
-        const blob = new Blob([htmlContentWithStyles], { type: 'text/html' });
+      // Recorre cada elemento de estilo y hoja de estilo enlazada
+      let stylesString = '';
+      styleElements.forEach((styleElement) => {
+        // Si es un elemento de estilo, agrega su contenido a stylesString
+        if (styleElement.tagName.toLowerCase() === 'style') {
+          stylesString += styleElement.innerText;
+        }
+        // Si es una hoja de estilo enlazada, agrega todo su contenido a stylesString
+        else if (styleElement.tagName.toLowerCase() === 'link') {
+          // Realiza una solicitud HTTP para obtener el contenido de la hoja de estilo
+          // Nota: esto puede fallar debido a restricciones de CORS dependiendo de la hoja de estilo
+          fetch(styleElement.href)
+            .then((response) => response.text())
+            .then((css) => {
+              stylesString += css;
+            });
+        }
+      });
+      console.log('stylesString', stylesString);
+      const styleTag = `<style>${stylesString}</style>`;
+      const htmlContentWithStyles = htmlContentCleaned + styleTag;
+      const blob = new Blob([htmlContentWithStyles], { type: 'text/html' });
 
-        const url = URL.createObjectURL(blob);
+      const url = URL.createObjectURL(blob);
 
-        chrome.runtime.sendMessage({url: url, title: title.innerText});
+      chrome.runtime.sendMessage({ url, title: title.innerText });
     } else {
-        console.log(`No se encontró ningún elemento con el selector ${selector}`);
+      console.log(`No se encontró ningún elemento con el selector ${selector}`);
     }
-  }else{
-    alert('Debes seleccionar una conversacion primero')
+  } else {
+    alert('Debes seleccionar una conversacion primero');
   }
 }
-document.addEventListener('keydown', function(event) {
-    if (event.ctrlKey && event.shiftKey && event.code === 'KeyZ') {
-        clearPastableContent();
-    }
-});
 
-function clearPastableContent() {
-  //check if have permission to get access to clipboard
-  navigator.permissions.query({name: "clipboard-read"}).then(result => {
-    if (result.state == "granted" || result.state == "prompt") {
-      navigator.clipboard.readText()
-      .then(pastableContent => {
-        let textarea = document.querySelector('textarea')
-        if(pastableContent && textarea){
-          let text = pastableContent.replace(/[\r\n]+/g, ' ');
-          getRedactSvgSetting((redactSvgSetting) => {
-            console.log('getRedactSvgSetting', redactSvgSetting)
-              if (redactSvgSetting === 'redactSvg1') {
-                text = redactSVGContent(text);
-              }
-
-              textarea.value += text;
-              textarea.style.height = 264 + 'px';
-              textarea.focus();
-            });
-        }else{
-          console.log('could not find textArea')
-        }
-      })
-      .catch(err => {
-        console.error('Failed to read clipboard contents: ', err);
-      });
-    }
-  });
-}
-function redactSVGContent(inputString) {
-  const regex = /<svg[\s\S]*?<\/svg>/g;
-  const redactedContent = '<svg><!-- redacted --></svg>';
-  const redactedString = inputString.replace(regex, redactedContent);
-  return redactedString;
-}
-
-function getRedactSvgSetting(callback) {
-  chrome.storage.sync.get('redactSvg', function(data) {
-    callback(data.redactSvg || 'redactSvg1'); // Default to 'redactSvg1' if no setting is found
-  });
-}
-
-let myMonitor = new ElementMonitor();
+const myMonitor = new ElementMonitor();
 myMonitor.init();
+const redacter = new TextRedacter();
