@@ -1,3 +1,5 @@
+import { formFields } from './config.js';
+
 class TextRedacter {
   constructor() {
     this.textAreaClass = 'prompt-textarea';
@@ -28,51 +30,49 @@ class TextRedacter {
   }
 
   clearPastableContent() {
-    console.log('clearPastableContent');
-    navigator.permissions.query({ name: 'clipboard-read' }).then((result) => {
-      if (result.state == 'granted' || result.state == 'prompt') {
-        navigator.clipboard.readText().then((pastableContent) => {
-          const textArea = document.querySelector('#prompt-textarea');
-          if (pastableContent && textArea) {
-            const text = this.redactContent(pastableContent);
+  console.log('clearPastableContent');
+  navigator.permissions.query({ name: 'clipboard-read' }).then((result) => {
+    if (result.state == 'granted' || result.state == 'prompt') {
+      navigator.clipboard.readText().then((pastableContent) => {
+        const textArea = document.querySelector('#prompt-textarea');
+        if (pastableContent && textArea) {
+          this.redactContent(pastableContent).then(text => {
             textArea.value += text;
             textArea.style.height = '264px';
             textArea.focus();
-          } else {
-            console.error('Could not find textArea with class:', this.textAreaClass);
-          }
-        }).catch((err) => {
-          console.error('Failed to read clipboard contents: ', err);
-        });
-      }
-    });
-  }
+          });
+        } else {
+          console.error('Could not find textArea with class:', this.textAreaClass);
+        }
+      }).catch((err) => {
+        console.error('Failed to read clipboard contents: ', err);
+      });
+    }
+  });
+}
 
   redactContent(inputString) {
     let settings = {};
 
-    const configKeys = [
-      'oneLiner', 'svgRedaction', 'aTag', 'pTag', 'h1Tag', 'h2Tag', 'h3Tag',
-      'h4Tag', 'h5Tag', 'h6Tag', 'ulTag', 'liTag', 'function', 'class',
-      'object', 'Interface', 'array', 'variable', 'dictionary',
-    ];
-
+    const configKeys = formFields.filter((field) => field?.name && field?.name?.toLowerCase().includes('redaction') || field?.name && field?.name?.toLowerCase().includes('oneliner'));
     const settingsPromise = new Promise((resolve, reject) => {
-      chrome.storage.sync.get(configKeys, (result) => {
-        console.log('result', result);
+      // Extract the 'name' properties from configKeys to use with chrome.storage.sync.get
+      const configKeyNames = configKeys.map(key => key.name);
+
+      chrome.storage.sync.get(configKeyNames, (result) => {
+        console.log('result', configKeys, result);
         if (chrome.runtime.lastError) {
           console.error(chrome.runtime.lastError);
           reject(chrome.runtime.lastError);
         } else {
           settings = result;
-
-          // Verificar y establecer un solo espacio si no está configurado
           for (const key of configKeys) {
-            if (!settings.hasOwnProperty(key) || !settings[key]) {
-              settings[key] = ' ';
+            // Use the 'name' property as the key
+            if (!settings.hasOwnProperty(key.name) || !settings[key.name]) {
+              // If the setting is not found or its value is falsey, use the 'defaultValue' property
+              settings[key.name] = key.defaultValue;
             }
           }
-
           resolve();
         }
       });
@@ -82,11 +82,8 @@ class TextRedacter {
       let redactedString = inputString;
       for (const setting in settings) {
         const redactionValue = settings[setting];
-        console.log('settings', settings, redactionValue, setting, settings[setting]);
 
-        if (setting === 'oneLiner' && redactionValue === 'always') {
-          redactedString = redactedString.replace(/[\r\n]+|\s{2,}/g, ' ');
-        } else if (setting === 'svgRedaction' && redactionValue === 'always') {
+        if (setting === 'svgRedaction' && redactionValue === 'always') {
           const regex = /<svg[\s\S]*?<\/svg>/g;
           const redactedContent = '<svg><!-- redacted --></svg>';
           redactedString = redactedString.replace(regex, redactedContent);
@@ -104,6 +101,10 @@ class TextRedacter {
           }
         }
       }
+      if (settings.oneLiner === 'always') {
+        redactedString = redactedString.replace(/[\r\n]+|\s{2,}/g, ' ');
+      }
+      console.log('redactedString', redactedString);
       return redactedString;
     }).catch((error) => {
       console.error('Failed to get settings from Chrome storage:', error);
