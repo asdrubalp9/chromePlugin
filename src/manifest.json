@@ -9,10 +9,8 @@
     "storage",
     "scripting",
     "tabs",
-    "clipboard",
-    "http://chat.openai.com/*",
-    "https://chat.openai.com/*",
-    "https://*.openai.com/*"
+    "notifications",
+    "clipboard"
   ],
   "action": {
     "default_popup": "popup.html",

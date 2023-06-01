@@ -31,44 +31,17 @@ class ElementMonitor {
     this.observer.observe(element, config);
   }
 
-  //     waitForReturnToOriginal(element) {
-  //     const config = { attributes: true, childList: true, subtree: true };
-  //     const callback = (mutationsList, observer) => {
-  //         if(this.trackedElement.outerHTML.includes('Regenerate response')) {
-  //             console.log('de vuelta a la normalidad!');
-  //             console.log('DING!');
-  //             this.audio.play();
-  //             this.observer.disconnect();
-  //             this.startMonitoring(element);
-
-  //             chrome.runtime.sendMessage({message: "getTabUrl"}, function(response) {
-  //                 if (chrome.runtime.lastError) {
-  //                     console.log('Error: ' + chrome.runtime.lastError.message);
-  //                     return;
-  //                 }
-  //                 console.log('response.tabUrl', response.tabUrl);
-  //                 if(!response.tabUrl.includes('chat.openai.com')) {
-  //                     console.log('DING!DING!DING!DING!')
-  //                 }
-  //             });
-  //         }
-  //     };
-
-  //     this.observer = new MutationObserver(callback);
-  //     this.observer.observe(element, config);
-  // }
   waitForReturnToOriginal(element) {
     const config = { attributes: true, childList: true, subtree: true };
     const self = this; // store reference to 'this'
 
     const callback = (mutationsList, observer) => {
-      if (self.trackedElement.outerHTML.includes('Regenerate response')) {
-        console.log('de vuelta a la normalidad!');
+      if (/(Regenerate response|New response|There was an error generating a response|Generate new response)/i.test(self.trackedElement.outerHTML)) {
+      //if (self.trackedElement.outerHTML.includes('Regenerate response')) {
 
         // Get the sound setting from the Chrome storage
         chrome.storage.sync.get(['sound'], (result) => {
           const soundSetting = result.sound;
-          console.log('soundSetting', soundSetting);
 
           // If the sound setting is 'never', don't play the sound
           if (soundSetting === 'never') {
@@ -77,21 +50,17 @@ class ElementMonitor {
 
           chrome.runtime.sendMessage({ message: 'getTabUrl' }, (response) => {
             if (chrome.runtime.lastError) {
-              console.log(`Error: ${chrome.runtime.lastError.message}`);
               return;
             }
-            console.log('response.tabUrl', response.tabUrl);
 
             // If the sound setting is 'notFocused' and the tab is focused, don't play the sound
             if (soundSetting === 'notFocused' && response.tabUrl.includes('chat.openai.com')) {
               return;
             }
 
-            console.log('DING!');
             self.audio.play();
             self.observer.disconnect();
             self.startMonitoring(element);
-            console.log('DING!DING!DING!DING!');
           });
         });
       }

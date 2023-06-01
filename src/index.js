@@ -44,7 +44,7 @@ document.getElementById('copyPasteBtn').addEventListener('click', () => {
   clearPastableContent();
 });
 function downloadHTMLContent() {
-  selector = '#__next main';
+  const selector = '#__next main';
   const element = document.querySelector(selector);
   const titleSelector = 'nav .bg-gray-800';
   const title = document.querySelector(titleSelector);

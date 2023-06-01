@@ -1,7 +1,7 @@
 class FormGenerator {
   constructor(className, fieldArray) {
     this.formSelector = className;
-    this.fieldArray = fieldArray;
+    this.fieldArray = JSON.parse(JSON.stringify(fieldArray));
   }
 
   toast(message = 'Saved successfully') {
@@ -18,7 +18,6 @@ class FormGenerator {
     return new Promise((resolve, reject) => {
       try {
         chrome.storage.sync.get([key], (result) => {
-          console.log(`Value currently is ${result[key]}`, defaultValue, key, result[key] == undefined ? defaultValue : result[key]);
           resolve(result[key] == undefined ? defaultValue : result[key]);
         });
       } catch (e) {
@@ -32,10 +31,12 @@ class FormGenerator {
     formElement.className = `form ${this.formSelector}`;
 
     for (const field of this.fieldArray) {
-      console.log('field', field);
 
       let fieldElement;
       switch (field.type) {
+        case 'button':
+          fieldElement = this.createButton(field);
+          break;
         case 'p':
           fieldElement = this.createP(field);
           break;
@@ -62,16 +63,27 @@ class FormGenerator {
           continue;
       }
 
-      const storedValue = await this.getStoredValue(field.name, field.defaultValue);
-      if (fieldElement.querySelector('input, textarea') !== null) {
-        fieldElement.querySelector('input, textarea').value = storedValue;
-      }
 
       formElement.appendChild(fieldElement);
     }
 
     const element = await this.waitForElement(this.formSelector);
     element.appendChild(formElement);
+  }
+
+ createButton(field) {
+    const divElement = document.createElement('div');
+    divElement.className = 'mb-3 d-flex justify-content-end';
+    const buttonElement = document.createElement('button');
+    buttonElement.className = field.class || 'btn btn-warning';  // usando la clase del campo si está disponible
+    buttonElement.innerText = field.label;
+    buttonElement.addEventListener('click', (e) => {
+      e.preventDefault();
+      field.action();
+    });
+    
+    divElement.appendChild(buttonElement);
+    return divElement;
   }
 
   createP(field) {
@@ -139,7 +151,6 @@ class FormGenerator {
     inputElement.addEventListener('change', (e) => {
       // Update in Chrome Storage
       chrome.storage.sync.set({ [field.name]: e.target.value }, () => {
-        console.log(`Value is set to ${e.target.value}`);
         this.toast(`Value is set to ${e.target.value}`);
       });
 
@@ -175,7 +186,6 @@ class FormGenerator {
     textAreaElement.addEventListener('change', (e) => {
       // Update in Chrome Storage
       chrome.storage.sync.set({ [field.name]: e.target.value }, () => {
-        console.log(`Value is set to ${e.target.value}`);
         this.toast(`Value is set to ${e.target.value}`);
       });
 
@@ -214,7 +224,6 @@ class FormGenerator {
 
     input.addEventListener('change', (e) => {
       chrome.storage.sync.set({ [field.name]: e.target.checked }, function () {
-        console.log(`Value is set to ${e.target.checked}`);
         this.toast(`Value is set to ${e.target.checked}`);
       });
 
@@ -252,7 +261,7 @@ class FormGenerator {
       field.options.forEach((option, index) => {
         const optionDiv = document.createElement('div');
         optionDiv.className = 'form-check';
-        console.log('option', option, storedValue, option.value == storedValue)
+
         const input = document.createElement('input');
         input.className = 'form-check-input';
         input.type = 'radio';
@@ -261,9 +270,13 @@ class FormGenerator {
         input.id = `${field.htmlId}${index + 1}`;
         input.checked = storedValue == option.value;
 
+        const optionLabel = document.createElement('label');
+        optionLabel.className = 'form-check-label';
+        optionLabel.htmlFor = input.id;
+        optionLabel.innerText = option.label;
+
         input.addEventListener('change', (e) => {
           chrome.storage.sync.set({ [field.name]: e.target.value }, () => {
-            console.log(`Value is set to ${e.target.value}`);
             this.toast(`Value is set to ${e.target.value}`);
           });
 
@@ -271,12 +284,6 @@ class FormGenerator {
             field.onChange(e);
           }
         });
-
-        const optionLabel = document.createElement('label');
-        optionLabel.className = 'form-check-label';
-        optionLabel.htmlFor = input.id;
-        optionLabel.innerText = option.label;
-
         optionDiv.appendChild(input);
         optionDiv.appendChild(optionLabel);
 

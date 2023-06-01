@@ -31,7 +31,6 @@ const formFields = [
   {
     name: 'oneLiner',
     label: 'Eliminate breakspaces, double spaces and new lines',
-    name: 'oneLiner',
     htmlId: 'oneLiner',
     htmlclass: '',
     value: '',
@@ -54,33 +53,30 @@ const formFields = [
     label: 'Redactable elements',
   },
   {
-    name: 'svgRedaction',
-    label: 'SVG Redaction',
-    placeholder: 'SVG Redaction',
-    htmlId: 'svgRedaction',
-    htmlclass: '',
-    value: '',
-    defaultValue: 'always',
-    type: 'radio',
-    Hint: '',
-    options: [
-      {
-        label: 'Always redact',
-        value: 'always',
-      },
-      {
-        label: 'Never Redact',
-        value: 'never',
-      },
-    ],
-  },
-  {
     type: 'p',
     label: '<span class="fw-bold">HowTo:</span> if the field has a space, the content of the elements won\'t be redacted, if it\'s <span class="fw-semibold">*</span> then all the content of the elements will be redacted; you can separate values with comas to select elements that <span class="fw-bold">WON\'T</span> be redacted, example: <span class="fw-semibold">.div1,#div2,.element, myFunction, myClass</span>',
   },
+  // {
+  //   type: 'button',
+  //   class:"btn btn-warning",
+  //   label: 'Reset to default',
+  //   action: (e) => {
+  //     console.log('click');
+  //   },
+  // }
 ];
 
 const typeOfElements = [
+  {
+    name: 'divTag',
+    label: 'div tag',
+    type: 'text',
+  },
+  {
+    name: 'svgRedaction',
+    type: 'radio',
+    label: 'SVG Redaction',
+  },
   {
     name: 'aTag',
     label: 'a tag',
@@ -131,42 +127,6 @@ const typeOfElements = [
     label: 'li tag',
     type: 'text',
   },
-  {
-    name: 'function',
-    label: 'Function',
-    type: 'text',
-  },
-  {
-    name: 'class',
-    label: 'Class',
-    type: 'text',
-  },
-  {
-    name: 'Object',
-    label: 'Object',
-    type: 'text',
-  },
-  {
-    name: 'Interface',
-    label: 'Interface',
-    type: 'text',
-  },
-  {
-    name: 'Array',
-    label: 'Array',
-    type: 'text',
-  },
-  {
-    name: 'Variable',
-    label: 'Variable',
-    type: 'text',
-  },
-  {
-    name: 'Dictionary',
-    label: 'Dictionary',
-    type: 'text',
-  },
-
 ];
 let k = 0;
 for (const element of typeOfElements) {

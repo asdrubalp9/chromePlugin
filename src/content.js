@@ -36,13 +36,19 @@ const downloadBtnHTML = `
 document.body.insertAdjacentHTML('beforeend', downloadBtnHTML);
 document.body.insertAdjacentHTML('beforeend', copyPasteBtn);
 // Conecta el botón con la función de descarga
-document.getElementById('downloadBtn').addEventListener('click', () => {
-  // Encuentra el elemento usando el selector CSS
-  downloadHTMLContent();
-});
+
+const intervalIddownloadBtn = setInterval(() => {
+  const downloadBtn = document.querySelector('#downloadBtn');
+  if (downloadBtn) {
+    clearInterval(intervalIddownloadBtn);
+    downloadBtn.addEventListener('click', () => {
+      downloadHTMLContent();
+    });
+  }
+}, 200);
 
 function downloadHTMLContent() {
-  selector = '#__next main';
+  const selector = '#__next main';
   const element = document.querySelector(selector);
   const titleSelector = 'nav .bg-gray-800';
   const title = document.querySelector(titleSelector);
