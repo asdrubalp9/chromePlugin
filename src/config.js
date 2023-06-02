@@ -50,7 +50,7 @@ const formFields = [
   },
   {
     type: 'separator',
-    label: 'Elements Redaction',
+    label: 'Element Redaction',
   },
   {
     type: 'p',
