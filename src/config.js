@@ -12,7 +12,7 @@ const formFields = [
     options: [
       {
         label: 'Always sound when chatGPT finishes',
-        value: 'always',  // Aquí es donde estaba el error, esto debería ser 'always', no 'notFocused'
+        value: 'always', 
       },
       {
         label: 'Only sound when chatGPT is not focused',
@@ -50,12 +50,57 @@ const formFields = [
   },
   {
     type: 'separator',
-    label: 'Redactable elements',
+    label: 'Elements Redaction',
   },
   {
     type: 'p',
-    label: '<span class="fw-bold">HowTo:</span> if the field has a space, the content of the elements won\'t be redacted, if it\'s <span class="fw-semibold">*</span> then all the content of the elements will be redacted; you can separate values with comas to select elements that <span class="fw-bold">WON\'T</span> be redacted, example: <span class="fw-semibold">.div1,#div2,.element, myFunction, myClass</span>',
+    label: 'Use css selectors to select the content of the HTML you want to redact and select the option to redact or not redact the content of the selected HTML element',
   },
+  {
+    htmlId: 'customSelector',
+    defaultValue: '',
+    type: 'customSelector',
+    Hint: '',
+    name: 'selectorSettingsRedaction',
+    fields: [
+      {
+        name: 'selector',
+        label: 'Custom CSS Selector',
+        placeholder: 'separate them by coma to select more than one element',
+        value: '',
+        htmlclass: '',
+        type: 'text',
+      },
+    ],
+    radioOptions: [
+      {
+        label: 'Redact content',
+        value: '*',
+      },
+      {
+        label: "Don't redact content",
+        value: ' ',
+      },
+    ],
+  },
+  {
+    htmlId: 'svgRedaction',
+    defaultValue: '',
+    type: 'svgRedaction',
+    name: 'svgRedaction',
+    type: 'radio',
+    label: 'SVG Redaction',
+    options: [
+        {
+          label: 'Always redact',
+          value: '*',
+        },
+        {
+          label: 'Never redact',
+          value: ' ',
+        },
+      ],
+    },
   // {
   //   type: 'button',
   //   class:"btn btn-warning",
@@ -67,66 +112,66 @@ const formFields = [
 ];
 
 const typeOfElements = [
-  {
-    name: 'divTag',
-    label: 'div tag',
-    type: 'text',
-  },
-  {
-    name: 'svgRedaction',
-    type: 'radio',
-    label: 'SVG Redaction',
-  },
-  {
-    name: 'aTag',
-    label: 'a tag',
-    type: 'text',
-  },
-  {
-    name: 'pTag',
-    label: 'p tag',
-    type: 'text',
-  },
-  {
-    name: 'h1Tag',
-    label: 'h1 tag',
-    type: 'text',
-  },
-  {
-    name: 'h2Tag',
-    label: 'h2 tag',
-    type: 'text',
-  },
-  {
-    name: 'h3Tag',
-    label: 'h3 tag',
-    type: 'text',
-  },
-  {
-    name: 'h4Tag',
-    label: 'h4 tag',
-    type: 'text',
-  },
-  {
-    name: 'h5Tag',
-    label: 'h5 tag',
-    type: 'text',
-  },
-  {
-    name: 'h6Tag',
-    label: 'h6 tag',
-    type: 'text',
-  },
-  {
-    name: 'ulTag',
-    label: 'ul tag',
-    type: 'text',
-  },
-  {
-    name: 'liTag',
-    label: 'li tag',
-    type: 'text',
-  },
+  // {
+  //   name: 'divTag',
+  //   label: 'div tag',
+  //   type: 'text',
+  // },
+    // {
+    //   name: 'svgRedaction',
+    //   type: 'radio',
+    //   label: 'SVG Redaction',
+    // },
+  // {
+  //   name: 'aTag',
+  //   label: 'a tag',
+  //   type: 'text',
+  // },
+  // {
+  //   name: 'pTag',
+  //   label: 'p tag',
+  //   type: 'text',
+  // },
+  // {
+  //   name: 'h1Tag',
+  //   label: 'h1 tag',
+  //   type: 'text',
+  // },
+  // {
+  //   name: 'h2Tag',
+  //   label: 'h2 tag',
+  //   type: 'text',
+  // },
+  // {
+  //   name: 'h3Tag',
+  //   label: 'h3 tag',
+  //   type: 'text',
+  // },
+  // {
+  //   name: 'h4Tag',
+  //   label: 'h4 tag',
+  //   type: 'text',
+  // },
+  // {
+  //   name: 'h5Tag',
+  //   label: 'h5 tag',
+  //   type: 'text',
+  // },
+  // {
+  //   name: 'h6Tag',
+  //   label: 'h6 tag',
+  //   type: 'text',
+  // },
+  // {
+  //   name: 'ulTag',
+  //   label: 'ul tag',
+  //   type: 'text',
+  // },
+  // {
+  //   name: 'liTag',
+  //   label: 'li tag',
+  //   type: 'text',
+  // },
 ];
 let k = 0;
 for (const element of typeOfElements) {

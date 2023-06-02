@@ -34,6 +34,9 @@ class FormGenerator {
 
       let fieldElement;
       switch (field.type) {
+        case 'customSelector':
+          fieldElement = await this.createCustomCssSelector(field);
+          break;
         case 'button':
           fieldElement = this.createButton(field);
           break;
@@ -59,7 +62,6 @@ class FormGenerator {
           fieldElement = await this.createRadio(field);
           break;
         default:
-          console.error(`Unsupported field type: ${field.type}`);
           continue;
       }
 
@@ -71,7 +73,74 @@ class FormGenerator {
     element.appendChild(formElement);
   }
 
- createButton(field) {
+  async createCustomCssSelector(field) {
+    const divElement = document.createElement('div');
+    divElement.className = 'mb-3 row';
+    const divCol8Element = document.createElement('div');
+    divCol8Element.className = 'col-8';
+    const divCol4Element = document.createElement('div');
+    divCol4Element.className = 'col-4 d-flex justify-content-center align-items-center';
+  
+    for (const subField of field.fields) {
+      const subFieldElement = await this.createTextField(subField);
+      divCol8Element.appendChild(subFieldElement);
+    }
+  
+    const storedValue = await this.getStoredValue(field.name, field.defaultValue);
+    const radioOptionsDiv = this.createRadioOptions(field, field.radioOptions, storedValue);
+    divCol8Element.appendChild(radioOptionsDiv);
+  
+    divElement.appendChild(divCol8Element);
+    divElement.appendChild(divCol4Element);
+  
+    return divElement;
+  }
+  
+  createRadioOptions(field, radioOptions, storedValue) {
+    const radioOptionsDiv = document.createElement('div');
+  
+    radioOptions.forEach((option, index) => {
+      const optionDiv = document.createElement('div');
+      optionDiv.className = 'form-check';
+      const input = document.createElement('input');
+      input.className = 'form-check-input';
+      input.type = 'radio';
+      input.name = field.name; // Changed from field.htmlId to field.name
+      input.value = option.value;
+      input.id = `${field.htmlId}${index + 1}`;
+      input.checked = storedValue.setting == option.value;
+  
+      const optionLabel = document.createElement('label');
+      optionLabel.className = 'form-check-label';
+      optionLabel.htmlFor = input.id;
+      optionLabel.innerText = option.label;
+  
+      input.addEventListener('change', (e) => {
+        const setting = {
+                          [field.name]: {
+                                          setting: e.target.value,
+                                          selector: e.target.closest('.row').querySelector('input[name="selector"]').value
+                                        }
+                        }
+        chrome.storage.sync.set(setting, () => {
+          this.toast(`Value is set to ${option.label}`);
+        });
+  
+        if (field.onChange) {
+          field.onChange(e);
+        }
+      });
+  
+      optionDiv.appendChild(input);
+      optionDiv.appendChild(optionLabel);
+      radioOptionsDiv.appendChild(optionDiv);
+    });
+  
+    return radioOptionsDiv;
+  }
+
+
+  createButton(field) {
     const divElement = document.createElement('div');
     divElement.className = 'mb-3 d-flex justify-content-end';
     const buttonElement = document.createElement('button');
@@ -135,7 +204,7 @@ class FormGenerator {
 
     const labelElement = document.createElement('label');
     labelElement.for = field.htmlId;
-    labelElement.className = 'form-label';
+    labelElement.className = 'form-label fw-semibold';
     labelElement.innerHTML = field.label;
 
     const inputElement = document.createElement('input');
@@ -146,11 +215,17 @@ class FormGenerator {
     inputElement.placeholder = field?.placeholder || '';
 
     const storedValue = await this.getStoredValue(field.name, field.defaultValue);
-    inputElement.value = storedValue;
+    inputElement.value = storedValue.selector;
 
     inputElement.addEventListener('change', (e) => {
-      // Update in Chrome Storage
-      chrome.storage.sync.set({ [field.name]: e.target.value }, () => {
+      
+      const setting = {
+                          [field.name]: {
+                                          setting: e.target.closest('.row').querySelector('.row [type="radio"]:checked').value,
+                                          selector: e.target.value,
+                                        }
+                        }
+      chrome.storage.sync.set(setting, () => {
         this.toast(`Value is set to ${e.target.value}`);
       });
 
@@ -277,7 +352,7 @@ class FormGenerator {
 
         input.addEventListener('change', (e) => {
           chrome.storage.sync.set({ [field.name]: e.target.value }, () => {
-            this.toast(`Value is set to ${e.target.value}`);
+            this.toast(`Value is set to ${option.label}`);
           });
 
           if (field.onChange) {
