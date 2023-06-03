@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "ChatGPT tools for devs",
   "version": "1.0",
-  "description": "Streamline your development workflow with our powerful Chrome plugin designed to optimize your interactions with ChatGPT. Receive sound notifications, download conversations, and effortlessly paste and optimize HTML content, empowering developers with a seamless and efficient AI-assisted experience",
+  "description": "Boost your dev workflow with our Chrome plugin for ChatGPT. Get notifications, download chats, and manage HTML content seamlessly.",
   "permissions": [
     "downloads",
     "audio",

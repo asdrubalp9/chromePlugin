@@ -58,13 +58,13 @@ const formFields = [
   },
   {
     htmlId: 'customSelector',
-    defaultValue: '',
+    defaultValue: '*',
     type: 'customSelector',
     Hint: '',
     name: 'selectorSettingsRedaction',
     fields: [
       {
-        name: 'selector',
+        name: 'selectorSettingsRedaction',
         label: 'Custom CSS Selector',
         placeholder: 'separate them by coma to select more than one element',
         value: '',
@@ -72,16 +72,16 @@ const formFields = [
         type: 'text',
       },
     ],
-    radioOptions: [
-      {
-        label: 'Redact content',
-        value: '*',
-      },
-      {
-        label: "Don't redact content",
-        value: ' ',
-      },
-    ],
+    // radioOptions: [
+    //   {
+    //     label: 'Redact content',
+    //     value: '*',
+    //   },
+    //   {
+    //     label: "Don't redact content",
+    //     value: ' ',
+    //   },
+    // ],
   },
   {
     htmlId: 'svgRedaction',
@@ -112,66 +112,7 @@ const formFields = [
 ];
 
 const typeOfElements = [
-  // {
-  //   name: 'divTag',
-  //   label: 'div tag',
-  //   type: 'text',
-  // },
-    // {
-    //   name: 'svgRedaction',
-    //   type: 'radio',
-    //   label: 'SVG Redaction',
-    // },
-  // {
-  //   name: 'aTag',
-  //   label: 'a tag',
-  //   type: 'text',
-  // },
-  // {
-  //   name: 'pTag',
-  //   label: 'p tag',
-  //   type: 'text',
-  // },
-  // {
-  //   name: 'h1Tag',
-  //   label: 'h1 tag',
-  //   type: 'text',
-  // },
-  // {
-  //   name: 'h2Tag',
-  //   label: 'h2 tag',
-  //   type: 'text',
-  // },
-  // {
-  //   name: 'h3Tag',
-  //   label: 'h3 tag',
-  //   type: 'text',
-  // },
-  // {
-  //   name: 'h4Tag',
-  //   label: 'h4 tag',
-  //   type: 'text',
-  // },
-  // {
-  //   name: 'h5Tag',
-  //   label: 'h5 tag',
-  //   type: 'text',
-  // },
-  // {
-  //   name: 'h6Tag',
-  //   label: 'h6 tag',
-  //   type: 'text',
-  // },
-  // {
-  //   name: 'ulTag',
-  //   label: 'ul tag',
-  //   type: 'text',
-  // },
-  // {
-  //   name: 'liTag',
-  //   label: 'li tag',
-  //   type: 'text',
-  // },
+
 ];
 let k = 0;
 for (const element of typeOfElements) {

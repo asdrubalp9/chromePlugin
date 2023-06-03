@@ -3,7 +3,7 @@ import { formFields, typeOfElements } from './config.js';
 import bootstrap from 'bootstrap';
 
 
-const formGenerator = new FormGenerator('.optionScreen', formFields);
+const formGenerator = new FormGenerator('optionScreen', formFields);
 formGenerator.generateForm().then(() => {
   console.log('Form has been generated.');
 }).catch((error) => {
@@ -11,10 +11,10 @@ formGenerator.generateForm().then(() => {
 });
 
 const loadingScreen = document.querySelector('.loadingScreen');
-const optionScreen = document.querySelector('.optionScreen');
 if(loadingScreen){
   loadingScreen.classList.add('d-none');
 }
+const optionScreen = document.querySelector('.optionScreen');
 if(optionScreen){
   optionScreen.classList.remove('d-none');
 }

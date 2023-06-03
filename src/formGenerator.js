@@ -85,14 +85,15 @@ class FormGenerator {
       const subFieldElement = await this.createTextField(subField);
       divCol8Element.appendChild(subFieldElement);
     }
-  
     const storedValue = await this.getStoredValue(field.name, field.defaultValue);
-    const radioOptionsDiv = this.createRadioOptions(field, field.radioOptions, storedValue);
-    divCol8Element.appendChild(radioOptionsDiv);
+    if(field?.radioOptions){
+      const radioOptionsDiv = this.createRadioOptions(field, field.radioOptions, storedValue);
+      divCol8Element.appendChild(radioOptionsDiv);
+    }
+    
   
     divElement.appendChild(divCol8Element);
     divElement.appendChild(divCol4Element);
-  
     return divElement;
   }
   
@@ -116,10 +117,11 @@ class FormGenerator {
       optionLabel.innerText = option.label;
   
       input.addEventListener('change', (e) => {
+        
         const setting = {
                           [field.name]: {
                                           setting: e.target.value,
-                                          selector: e.target.closest('.row').querySelector('input[name="selector"]').value
+                                          selector: e.target.closest('.row').querySelector('input[type="text"]').value
                                         }
                         }
         chrome.storage.sync.set(setting, () => {
@@ -221,7 +223,7 @@ class FormGenerator {
       
       const setting = {
                           [field.name]: {
-                                          setting: e.target.closest('.row').querySelector('.row [type="radio"]:checked').value,
+                                          //setting: e.target.closest('.row').querySelector('.row [type="radio"]:checked').value,
                                           selector: e.target.value,
                                         }
                         }
@@ -370,11 +372,12 @@ class FormGenerator {
   }
 
   async waitForElement(selector, time = 2000, interval = 100) {
+    console.log('selector', selector)
     const endTime = Number(new Date()) + time;
 
     const check = (resolve, reject) => {
-      if (document.querySelector(selector)) {
-        resolve(document.querySelector(selector));
+      if (document.querySelector('.'+selector)) {
+        resolve(document.querySelector('.'+selector));
       } else if (Number(new Date()) < endTime) {
         setTimeout(check, interval, resolve, reject);
       } else {
