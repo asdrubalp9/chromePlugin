@@ -45,6 +45,7 @@ module.exports = {
         { from: path.join(__dirname, 'src', 'icon128.png'), to: path.join(__dirname, 'dist', 'icon128.png') },
         { from: path.join(__dirname, 'src', 'options.html'), to: path.join(__dirname, 'dist', 'options.html') },
         { from: path.join(__dirname, 'src', 'popup.html'), to: path.join(__dirname, 'dist', 'popup.html') },
+        { from: path.join(__dirname, 'src', 'images'), to: path.join(__dirname, 'dist', 'images') },
       ],
     }),
   ],

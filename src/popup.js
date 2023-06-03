@@ -1,5 +1,6 @@
 import FormGenerator from './formGenerator.js';
 import { formFields, typeOfElements } from './config.js';
+import bootstrap from 'bootstrap';
 
 
 const formGenerator = new FormGenerator('.optionScreen', formFields);
@@ -13,3 +14,8 @@ const loadingScreen = document.querySelector('.loadingScreen');
 const optionScreen = document.querySelector('.optionScreen');
 loadingScreen.classList.add('d-none');
 optionScreen.classList.remove('d-none');
+// on click  #optionsLink open options.html
+const optionsLink = document.querySelector('#optionsLink');
+optionsLink.addEventListener('click', () => {
+  chrome.runtime.openOptionsPage();
+});
