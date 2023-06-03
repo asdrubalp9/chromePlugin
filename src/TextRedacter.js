@@ -145,7 +145,6 @@ class TextRedacter {
     selectors.forEach(sel => {
       // Obtén todos los elementos que coinciden con el selector.
       const elements = doc.querySelectorAll(sel);
-      console.log('sel', sel, elements)
 
       // Reemplaza el contenido de cada elemento seleccionado con '<!-- redacted -->'.
       elements.forEach(element => {
