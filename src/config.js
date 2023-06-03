@@ -54,7 +54,7 @@ const formFields = [
   },
   {
     type: 'p',
-    label: 'Use css selectors to select the content of the HTML you want to redact and select the option to redact or not redact the content of the selected HTML element',
+    label: 'Use css selectors to select the content of the HTML you want to redact and select the option to redact or not redact the content of the selected HTML element. <br> To paste the content, just press ctrl+shift+Z and it will paste it in the prompt or press the button bellow the download chat button.',
   },
   {
     htmlId: 'customSelector',

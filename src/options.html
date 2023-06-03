@@ -3,10 +3,6 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-  <meta name="generator" content="Hugo 0.111.3">
-  <title></title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
   integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
@@ -178,6 +174,7 @@
 
   <header class="site-header sticky-top py-1">
     <nav class="container d-flex flex-column flex-md-row justify-content-between">
+      <a class="py-2 d-none d-md-inline-block" href="#howto">How to</a>
       <a class="py-2 d-none d-md-inline-block" href="#author">About the author</a>
       <a class="py-2 d-none d-md-inline-block" href="#theLoop">Have an idea?</a>
       <a class="py-2 d-none d-md-inline-block" href="#theLoop">Be in the loop!</a>
@@ -211,7 +208,50 @@
               Effortlessly paste and optimize HTML content to the chatGPT prompt area for maximum information transfer
             </li>
           </ul>
-          <p class=" fw-normal text-center text-danger" href="#">MORE COMING SOON!</p>
+          <p class=" fw-normal text-center text-danger" href="#">MORE FEATURES COMING SOON!</p>
+        </div>
+      </div>
+    </div>
+    <a name="howto"></a>
+    <div class="row bg-body-tertiary d-flex justify-content-between d-flex justify-content-around" >
+      <div class="col-md-6 d-flex align-items-center justify-content-center text-center">
+        <div>
+          <h1 class="display-4 fw-normal text-center">
+            How to use this plugin
+          </h1>
+          <ul class="text-start">
+            <li>
+              Configure the plugin here or click on the icon of the plugin to open the configuration tab
+            </li>
+            <li>
+              <div class="container-fluid p-3">
+                <div class="toast align-items-center text-bg-success border-0 fade sticky-top" role="alert" aria-live="assertive"
+                    aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            
+                        </div>
+                        <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+                <form class="d-none row optionScreen">
+                </form>
+              </div>
+            </li>
+            <li>
+              Copy HTML code you'd like to redact
+            </li>
+            <li>
+              Press Ctrl+shift+Z or click the button <img style="border-radius:50%; overflow:hidden;" src="images/pasteBtn.png"> bellow the download conversation button to paste the redacted code to the prompt
+            </li>
+            <li>
+              You can also configure if you'd like to hear a sound when chatGPT finishes responding so you can do other things while waiting
+            </li>
+            <li>
+              Do you like your current conversation with chatGPT? download it with the <img style="border-radius:50%; overflow:hidden;" src="images/downloadBtn.png"> button
+            </li>
+          </ul>
+          <p class=" fw-normal text-center text-danger" href="#">MORE FEATURES COMING SOON!</p>
         </div>
       </div>
     </div>
@@ -408,10 +448,10 @@
   </footer> -->
 
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script> -->
 
-
+<script src="popup.js"></script>
 
 
 </body>

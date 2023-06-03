@@ -12,10 +12,16 @@ formGenerator.generateForm().then(() => {
 
 const loadingScreen = document.querySelector('.loadingScreen');
 const optionScreen = document.querySelector('.optionScreen');
-loadingScreen.classList.add('d-none');
-optionScreen.classList.remove('d-none');
+if(loadingScreen){
+  loadingScreen.classList.add('d-none');
+}
+if(optionScreen){
+  optionScreen.classList.remove('d-none');
+}
 // on click  #optionsLink open options.html
 const optionsLink = document.querySelector('#optionsLink');
-optionsLink.addEventListener('click', () => {
-  chrome.runtime.openOptionsPage();
-});
+if(optionsLink){
+  optionsLink.addEventListener('click', () => {
+    chrome.runtime.openOptionsPage();
+  });
+}
