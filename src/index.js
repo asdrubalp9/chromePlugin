@@ -44,6 +44,7 @@ document.getElementById('copyPasteBtn').addEventListener('click', () => {
   clearPastableContent();
 });
 function downloadHTMLContent() {
+  console.log('clikiti')
   const selector = '#__next main';
   const element = document.querySelector(selector);
   const titleSelector = 'nav .bg-gray-800';
@@ -91,37 +92,3 @@ function downloadHTMLContent() {
     alert('Debes seleccionar una conversacion primero');
   }
 }
-
-function clearPastableContent() {
-  // check if have permission to get access to clipboard
-  navigator.permissions.query({ name: 'clipboard-read' }).then((result) => {
-    if (result.state == 'granted' || result.state == 'prompt') {
-      navigator.clipboard.readText()
-        .then((pastableContent) => {
-          const textarea = document.querySelector('textarea');
-          if (pastableContent && textarea) {
-            const text = pastableContent.replace(/[\r\n]+/g, ' ');
-            console.log('pastableContent', pastableContent, text);
-            textarea.value += text;
-            textarea.style.height = `${264}px`;
-            textarea.focus();
-          } else {
-            console.log('could not find textArea');
-          }
-        })
-        .catch((err) => {
-          console.error('Failed to read clipboard contents: ', err);
-        });
-    }
-  });
-}
-console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-
-setTimeout(() => {
-  console.log('ding');
-  const audioUrl = chrome.runtime.getURL('ding.mp3');
-  const audio = new Audio(audioUrl);
-  audio.play();
-}, 2000);
-// let myMonitor = new ElementMonitor('myElementId');
-// myMonitor.init();

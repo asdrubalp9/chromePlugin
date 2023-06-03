@@ -48,6 +48,7 @@ const intervalIddownloadBtn = setInterval(() => {
 }, 200);
 
 function downloadHTMLContent() {
+  console.log('clikiti')
   const selector = '#__next main';
   const element = document.querySelector(selector);
   const titleSelector = 'nav .bg-gray-800';
@@ -80,7 +81,7 @@ function downloadHTMLContent() {
             });
         }
       });
-      console.log('stylesString', stylesString);
+      
       const styleTag = `<style>${stylesString}</style>`;
       const htmlContentWithStyles = htmlContentCleaned + styleTag;
       const blob = new Blob([htmlContentWithStyles], { type: 'text/html' });

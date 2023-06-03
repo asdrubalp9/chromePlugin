@@ -31,7 +31,6 @@ class TextRedacter {
   } 
 
   async pasteContent() {
-    console.log('pastingContent');
     try {
       const permissionStatus = await navigator.permissions.query({ name: 'clipboard-read' });
       if (permissionStatus.state === 'granted' || permissionStatus.state === 'prompt') {
@@ -82,15 +81,13 @@ class TextRedacter {
 
     return settingsPromise.then(() => {
       let redactedString = inputString;
-      console.log('settings',settings)
+  
       for (const setting in settings) {
         
         const redactionValue = settings[setting];
         // Extraemos el nombre del elemento y quitamos 'Redaction'
         let elementName = setting.replace('Redaction', '').toLowerCase();
-        
-        console.log('setting +++++++++>', setting)
-        console.log('settings',setting,redactionValue, elementName)
+      
         if (['selectorSettingsRedaction'].includes(setting) && redactionValue !== ' ') { 
           redactedString = this.redactHtmlCode(redactedString, redactionValue.selector, redactionValue.setting);
 
@@ -134,11 +131,10 @@ class TextRedacter {
     if (config === ' ') {
         return doc.body.innerHTML;
     }
-    console.log('selectorString',selectorString)
     // Identificar los elementos con los selectores proporcionados
     var selectors = selectorString.split(',');
     selectors.forEach(function(sel) {
-      console.log('sel',sel)
+
         var elements = doc.querySelectorAll(sel.trim());
         elements.forEach(function(el) {
             // Redactar el contenido del elemento

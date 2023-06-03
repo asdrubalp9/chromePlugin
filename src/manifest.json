@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "ChatEnhancer",
+  "name": "ChatGPT tools for devs",
   "version": "1.0",
-  "description": "this adds some features to the chat",
+  "description": "Streamline your development workflow with our powerful Chrome plugin designed to optimize your interactions with ChatGPT. Receive sound notifications, download conversations, and effortlessly paste and optimize HTML content, empowering developers with a seamless and efficient AI-assisted experience",
   "permissions": [
     "downloads",
     "audio",
@@ -23,7 +23,7 @@
   },
   "web_accessible_resources": [{
     "resources": ["ding.mp3"],
-    "matches": ["<all_urls>"]
+    "matches": ["*://*.openai.com/*"]
   }],
   "background": {
     "service_worker": "background.js",
@@ -42,6 +42,6 @@
     }
   ],
   "host_permissions": [
-    "<all_urls>"
+    "*://*.openai.com/*"
   ]
 }
